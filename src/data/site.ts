@@ -183,3 +183,95 @@ export const countries: readonly Element[] = [
   { number: '08', symbol: 'ZA', name: 'South Africa' },
   { number: '09', symbol: 'US', name: 'United States' },
 ];
+
+export const planDetails = {
+  starter: {
+    symbol: 'St',
+    summary: 'For brands getting serious about paid media.',
+    features: ['Four senior people on your account', 'Monthly strategy meeting', 'SKU-level profit reporting'],
+  },
+  growth: {
+    symbol: 'Gr',
+    summary: 'For brands scaling across more than one channel.',
+    features: [
+      'Four senior people on your account',
+      'Fortnightly strategy meeting',
+      'SKU-level profit reporting',
+      'Multi-channel budget planning',
+    ],
+  },
+  scale: {
+    symbol: 'Sc',
+    summary: 'For established brands that want depth on every channel.',
+    features: [
+      'A specialist for each channel you run',
+      'Weekly strategy meeting',
+      'Quarterly review led by your exec sponsor',
+      'Custom reporting',
+      'Multi-country campaigns',
+    ],
+  },
+} as const;
+
+export const pricingTerms = {
+  customAbove: 70_000,
+  onboardingFrom: 870,
+  minimumSpend: 4_500,
+  startMonths: 3,
+  reviewDays: 90,
+} as const;
+
+export const includedInEveryPlan = [
+  'Strategy and account management',
+  'A Slack line to your whole team',
+  'A full tracking and analytics audit',
+  'Profit reporting per product, on AdPeak',
+  'You own every ad account and all the data',
+  'No lock-in after your first three months',
+] as const;
+
+export const pricingFaqs = [
+  {
+    q: 'Why don’t you charge a percentage of ad spend?',
+    a: 'Because it rewards an agency for spending more of your money, whether or not that spend is profitable. A flat fee means our only incentive is your margin, and our fee falls as a share of your budget as you grow.',
+  },
+  {
+    q: 'Who actually works on my account?',
+    a: 'Four senior people, each with seven or more years’ experience: a channel specialist, a tracking and analytics specialist, an account manager and an exec sponsor from our leadership team. You meet all four before you sign. No juniors.',
+  },
+  {
+    q: 'Do I own my ad accounts and data?',
+    a: 'Yes, always. Every account sits in your name and you have access to everything at all times. If you leave, you leave with all of it.',
+  },
+  {
+    q: 'What happens in the first 90 days?',
+    a: 'Week one, we map spend, revenue and margin for every product in your feed and fix any tracking gaps. Then we start cutting what loses money and scaling what makes it. If we can’t show profit gains in 90 days, we’ll tell you before you have to ask.',
+  },
+  {
+    q: 'Where is your team based?',
+    a: 'Accounts are led from the UK and run on UK hours. The specialists behind them work across nine countries. We hire for one job each, wherever the best people are, which is how a mid-market fee buys a senior team.',
+  },
+] as const;
+
+export const reviews = [
+  {
+    quote: 'They take the time to listen, and we pivot when needed and take meetings outside of scope when it’s required.',
+    who: 'CEO & Owner',
+    org: 'Swynford Manor',
+  },
+  {
+    quote: 'They’re responsive, insightful, and dedicated to providing excellent customer service.',
+    who: 'Department Head',
+    org: 'Envisage Dental',
+  },
+  {
+    quote: '94n Digital has been able to drive through the problems accurately and successfully.',
+    who: 'Founder',
+    org: 'Advantage Pro Services',
+  },
+  {
+    quote: 'Work is always delivered on time and sometimes ahead of time.',
+    who: 'Director',
+    org: 'Webny Digital',
+  },
+] as const;

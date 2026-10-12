@@ -1,0 +1,176 @@
+---
+import ElementTile from '../components/ElementTile.astro';
+import PageIntro from '../components/PageIntro.astro';
+import SkuLedger from '../components/SkuLedger.astro';
+import { auditMailto, contact } from '../data/site';
+import Base from '../layouts/Base.astro';
+
+const steps = [
+  {
+    number: '01',
+    symbol: 'Fd',
+    name: 'Send your feed',
+    when: 'Day 0',
+    body: 'Share read-only access to Merchant Center and your ad accounts, or simply send a product export with cost prices.',
+  },
+  {
+    number: '02',
+    symbol: 'An',
+    name: 'We analyse it',
+    when: 'Days 1–4',
+    body: 'We match ad spend and revenue to margin for every product in AdPeak, and check your tracking is telling the truth.',
+  },
+  {
+    number: '03',
+    symbol: 'Rp',
+    name: 'You get the report',
+    when: 'Day 5',
+    body: 'A ranked list of the products losing you money, with pounds attached, and what we’d do about each one. Walked through on a call.',
+  },
+];
+
+const youGet = [
+  'Every product ranked by contribution margin after ad spend',
+  'The total monthly loss hiding in your long tail',
+  'The products we’d scale, and why',
+  'A tracking health check, so you know the numbers are real',
+  'A 30-minute walkthrough with a senior specialist',
+];
+---
+
+<Base
+  title="Free SKU profit audit"
+  description="Send us your product feed. Within five working days we’ll show you which products are losing money on ads, with pounds attached. Free."
+>
+  <PageIntro eyebrow="Free SKU profit audit" title="Find out which products are losing you money.">
+    <p>
+      Send us your product feed. Within five working days we’ll show you which products cost more to
+      advertise than they earn, with pounds attached. Free, and yours to keep whether or not we work
+      together.
+    </p>
+  </PageIntro>
+
+  <section class="section">
+    <div class="wrap request">
+      <div class="request__copy reveal">
+        <span class="eyebrow">Request your audit</span>
+        <h2 class="heading-m">Email us, or call. A senior specialist will reply within one working day.</h2>
+        <div class="request__actions">
+          <a class="btn btn--primary" href={auditMailto}>Email {contact.email} <span class="arrow">→</span></a>
+          <a class="btn btn--ghost" href={contact.phoneHref}>Call {contact.phone}</a>
+        </div>
+        <p class="request__note">
+          Tell us your website, rough monthly ad spend and which channels you run. We’ll take it from
+          there. No sales sequence, no obligation.
+        </p>
+        <h3 class="request__label">What you get</h3>
+        <ul class="request__list">
+          {youGet.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+      <div class="reveal">
+        <SkuLedger animate={false} />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">How it works</span>
+        <h2 class="heading-l">Feed in, report out, in five working days.</h2>
+      </div>
+      <ol class="steps">
+        {
+          steps.map((step) => (
+            <li class="reveal">
+              <ElementTile number={step.number} symbol={step.symbol} name={step.name} value={step.when} />
+              <p>{step.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .request {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(2.5rem, 6vw, 5rem);
+    align-items: start;
+  }
+
+  .request__copy {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .request__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .request__note {
+    color: var(--muted);
+  }
+
+  .request__label {
+    margin-top: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .request__list {
+    margin: -0.5rem 0 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--ink);
+  }
+
+  .request__list li {
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  @media (max-width: 64rem) {
+    .request {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .steps li {
+    display: grid;
+    gap: 1.25rem;
+    align-content: start;
+  }
+
+  .steps :global(.tile) {
+    aspect-ratio: 4 / 3;
+  }
+
+  .steps p {
+    color: var(--muted);
+  }
+
+  @media (max-width: 52rem) {
+    .steps {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

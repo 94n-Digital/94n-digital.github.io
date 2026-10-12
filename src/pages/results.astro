@@ -1,0 +1,234 @@
+---
+import AuditCta from '../components/AuditCta.astro';
+import AwardsRow from '../components/AwardsRow.astro';
+import CaseCard from '../components/CaseCard.astro';
+import ClientWall from '../components/ClientWall.astro';
+import PageIntro from '../components/PageIntro.astro';
+import { caseStudies, contact, proof, reviews } from '../data/site';
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Results"
+  description="Before-and-after results from profit-led paid media: Hiatt Hardware +87% revenue, a London plumbing retailer from −34% to +10% year on year, Vertella from £0 to £1m+."
+>
+  <PageIntro eyebrow="Results" title="Before and after. In pounds.">
+    <p>
+      Every result here started the same way: a product-by-product look at where ad spend was making
+      money and where it wasn’t. UK clients first.
+    </p>
+  </PageIntro>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="cases">
+        {caseStudies.map((study) => <div class="reveal"><CaseCard study={study} detailed /></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="wrap vertical">
+      <div class="section-head reveal">
+        <span class="eyebrow">Where we’re strongest</span>
+        <h2 class="heading-l">Home, hardware and trade supplies.</h2>
+        <p class="lede">
+          Big catalogues, thin margins, and a long tail of products that quietly cost more to
+          advertise than they earn. It’s the sector where SKU-level profit matters most, and where
+          our numbers are strongest.
+        </p>
+      </div>
+      <dl class="vertical__stats reveal">
+        <div>
+          <dt>Hiatt Hardware</dt>
+          <dd class="figure">+87%</dd>
+          <p>revenue in 18 months across a 2,000-product catalogue</p>
+        </div>
+        <div>
+          <dt>London plumbing & heating retailer</dt>
+          <dd class="figure accent">+44pts</dd>
+          <p>swing in year-on-year revenue, from −34% to +10%, while the sector fell ~30%</p>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="reviews-head">
+        <div class="section-head reveal">
+          <span class="eyebrow">What clients say</span>
+          <h2 class="heading-l">
+            {proof.clutchRating} on Clutch, from {proof.clutchReviews} reviews.
+          </h2>
+        </div>
+        <a class="btn btn--ghost reveal" href={contact.clutch} rel="noopener">Read them on Clutch <span class="arrow">↗</span></a>
+      </div>
+      <ul class="reviews">
+        {
+          reviews.map((review) => (
+            <li class="reveal">
+              <blockquote>
+                <p>“{review.quote}”</p>
+              </blockquote>
+              <p class="reviews__who">
+                {review.who}, <strong>{review.org}</strong>
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Some of the brands we work with</span>
+        <h2 class="heading-m">{proof.brands} brands across the UK, Europe and the US.</h2>
+      </div>
+      <div class="reveal"><ClientWall /></div>
+      <div class="awards reveal">
+        <AwardsRow />
+      </div>
+    </div>
+  </section>
+
+  <AuditCta />
+</Base>
+
+<style>
+  .cases {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.5rem);
+  }
+
+  .cases > div {
+    display: grid;
+  }
+
+  @media (max-width: 52rem) {
+    .cases {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .vertical {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2.5rem, 6vw, 5rem);
+    align-items: end;
+  }
+
+  .vertical .section-head {
+    margin-bottom: 0;
+  }
+
+  .vertical__stats {
+    display: grid;
+    gap: 2.5rem;
+    margin: 0;
+  }
+
+  .vertical__stats div {
+    display: grid;
+    gap: 0.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid #333;
+  }
+
+  .vertical__stats dt {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #9a9a9a;
+  }
+
+  .vertical__stats dd {
+    margin: 0;
+    font-size: clamp(3.5rem, 8vw, 6.5rem);
+  }
+
+  .vertical__stats p {
+    color: #b0b0b0;
+  }
+
+  @media (max-width: 52rem) {
+    .vertical {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .reviews-head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .reviews-head .btn {
+    margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
+  }
+
+  .reviews {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--ink);
+  }
+
+  .reviews li {
+    display: grid;
+    gap: 1.25rem;
+    align-content: space-between;
+    padding: 2rem 2rem 2rem 0;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .reviews li:nth-child(even) {
+    padding-left: 2rem;
+    border-left: 1px solid var(--line-strong);
+  }
+
+  blockquote {
+    margin: 0;
+    font-size: var(--step-2);
+    line-height: 1.25;
+    letter-spacing: -0.025em;
+  }
+
+  .reviews__who {
+    font-size: 0.92rem;
+    color: var(--muted);
+  }
+
+  .reviews__who strong {
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  @media (max-width: 52rem) {
+    .reviews-head {
+      flex-direction: column;
+      align-items: start;
+    }
+
+    .reviews {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .reviews li:nth-child(even) {
+      padding-left: 0;
+      border-left: 0;
+    }
+  }
+
+  .awards {
+    margin-top: 3.5rem;
+  }
+</style>

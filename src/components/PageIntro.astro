@@ -1,0 +1,46 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+}
+
+const { eyebrow, title } = Astro.props;
+---
+
+<section class="intro">
+  <div class="intro__paper graph-paper" aria-hidden="true"></div>
+  <div class="wrap intro__inner">
+    <span class="eyebrow">{eyebrow}</span>
+    <h1 class="heading-xl">{title}</h1>
+    <div class="lede"><slot /></div>
+  </div>
+</section>
+
+<style>
+  .intro {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(4rem, 9vw, 7.5rem) clamp(3rem, 6vw, 5rem);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .intro__paper {
+    position: absolute;
+    inset: 0;
+    mask-image: linear-gradient(110deg, transparent 45%, black 90%);
+  }
+
+  .intro__inner {
+    position: relative;
+    display: grid;
+    gap: 1.75rem;
+  }
+
+  h1 {
+    max-width: 16ch;
+  }
+
+  .lede :global(p + p) {
+    margin-top: 1rem;
+  }
+</style>

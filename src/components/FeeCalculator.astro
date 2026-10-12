@@ -307,7 +307,7 @@ const gbp = (n: number) => `£${Math.round(n).toLocaleString('en-GB')}`;
 
   @media (max-width: 52rem) {
     .calc {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .calc__result {

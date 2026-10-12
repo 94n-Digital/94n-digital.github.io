@@ -109,7 +109,7 @@ export const caseStudies: readonly CaseStudy[] = [
     measure: 'Revenue, year on year',
     period: 'While the sector fell ~30%',
     context:
-      'A London trade retailer in steep decline. We rebuilt the account product by product and took it back into growth while the market kept falling.',
+      'A trade retailer in steep decline. We rebuilt the account product by product and took it back into growth while the market kept falling.',
     uk: true,
   },
   {
@@ -249,7 +249,7 @@ export const pricingFaqs = [
   },
   {
     q: 'Where is your team based?',
-    a: 'Accounts are led from the UK and run on UK hours. The specialists behind them work across nine countries. We hire for one job each, wherever the best people are, which is how a mid-market fee buys a senior team.',
+    a: 'Every account has a UK-based lead who works your hours. The specialists behind them work across nine countries. We hire for one job each, wherever the best people are, which is how a mid-market fee buys a senior team.',
   },
 ] as const;
 

@@ -21,7 +21,7 @@ These are converted from the EUR price list at about £0.87/€. Set round sterl
 
 - [ ] Four senior people on every account, including Starter, each with 7+ years' experience. "No juniors."
 - [ ] "You'll meet all four before you sign"
-- [ ] Accounts are led from the UK and run on UK hours
+- [ ] Every account has a UK-based lead who works the client's hours (pricing FAQ)
 - [ ] SKU profit audit: free, delivered within five working days, includes a 30-minute walkthrough
 - [ ] "A senior specialist will reply within one working day" (audit page)
 - [ ] Around 30 people across nine countries (GB, LV, IN, ES, PT, BG, BR, ZA, US). Founded 2022 in Riga.

@@ -1,0 +1,318 @@
+---
+type Verdict = 'scale' | 'cut' | 'hold';
+type Row = { sku: string; product: string; spend: number; revenue: number; margin: number; verdict: Verdict };
+
+interface Props {
+  animate?: boolean;
+}
+
+const { animate = true } = Astro.props;
+
+const rows: readonly Row[] = [
+  { sku: 'HW-1042', product: 'Thermostatic shower valve', spend: 1840, revenue: 14920, margin: 3450, verdict: 'scale' },
+  { sku: 'HW-2210', product: 'Copper elbow 15mm, 10-pack', spend: 960, revenue: 1120, margin: -610, verdict: 'cut' },
+  { sku: 'HW-0388', product: 'Brass basin mixer', spend: 1260, revenue: 8410, margin: 1520, verdict: 'scale' },
+  { sku: 'HW-0917', product: 'Radiator valve set', spend: 720, revenue: 3980, margin: 640, verdict: 'hold' },
+  { sku: 'HW-3301', product: 'PTFE tape, 12m', spend: 540, revenue: 410, margin: -455, verdict: 'cut' },
+  { sku: 'HW-1176', product: 'Soft-close cabinet hinge', spend: 880, revenue: 5760, margin: 1190, verdict: 'scale' },
+  { sku: 'HW-0452', product: 'Outdoor wall light', spend: 1120, revenue: 1530, margin: -780, verdict: 'cut' },
+  { sku: 'HW-2894', product: 'Satin door handle set', spend: 410, revenue: 2240, margin: 260, verdict: 'hold' },
+];
+
+const gbp = (n: number) =>
+  `${n < 0 ? '−' : ''}£${Math.abs(n).toLocaleString('en-GB')}`;
+
+const recovered = rows.filter((r) => r.verdict === 'cut').reduce((sum, r) => sum - r.margin, 0);
+const cutCount = rows.filter((r) => r.verdict === 'cut').length;
+---
+
+<figure class:list={['ledger', { 'ledger--animate': animate }]}>
+  <div class="ledger__bar">
+    <span class="ledger__dot" aria-hidden="true"></span>
+    <span>AdPeak · SKU ledger</span>
+    <span class="ledger__range">Last 30 days</span>
+  </div>
+
+  <table>
+    <caption class="visually-hidden">
+      Illustrative product-level ad spend, revenue, contribution margin and decision
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">SKU</th>
+        <th scope="col" class="col-product">Product</th>
+        <th scope="col" class="num">Spend</th>
+        <th scope="col" class="num col-revenue">Revenue</th>
+        <th scope="col" class="num">Margin</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        rows.map((row, i) => (
+          <tr class={`row row--${row.verdict}`} style={`--i:${i}`}>
+            <td class="sku">{row.sku}</td>
+            <td class="col-product">{row.product}</td>
+            <td class="num">{gbp(row.spend)}</td>
+            <td class="num col-revenue">{gbp(row.revenue)}</td>
+            <td class:list={['num', 'margin', { negative: row.margin < 0 }]}>{gbp(row.margin)}</td>
+            <td>
+              <span class={`chip chip--${row.verdict}`}>{row.verdict}</span>
+            </td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+
+  <figcaption class="ledger__foot">
+    <div>
+      <span class="ledger__label">Budget moved off {cutCount} loss-making products</span>
+      <span class="ledger__note">Illustrative data</span>
+    </div>
+    <span class="ledger__total figure">+{gbp(recovered)}<small>/mo</small></span>
+  </figcaption>
+</figure>
+
+<style>
+  .ledger {
+    margin: 0;
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    box-shadow:
+      12px 12px 0 -1px var(--paper),
+      12px 12px 0 0 var(--ink);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ledger__bar {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--ink);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .ledger__range {
+    margin-left: auto;
+    color: var(--muted);
+  }
+
+  .ledger__dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--magenta);
+    box-shadow: 0 0 0 0 rgb(255 27 191 / 0.6);
+    animation: pulse 2.4s infinite;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  th:nth-child(1) { width: 17%; }
+  th:nth-child(3), th:nth-child(4), th:nth-child(5) { width: 12%; }
+  th:nth-child(6) { width: 15%; }
+
+  th {
+    padding: 0.7rem 0.6rem 0.5rem;
+    font-weight: 500;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-align: left;
+    color: var(--faint);
+  }
+
+  td {
+    position: relative;
+    padding: 0.55rem 0.6rem;
+    border-top: 1px dashed var(--line);
+    white-space: nowrap;
+  }
+
+  .num {
+    text-align: right;
+  }
+
+  .sku {
+    color: var(--faint);
+  }
+
+  td.col-product {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .margin {
+    font-weight: 600;
+  }
+
+  .margin.negative {
+    color: var(--magenta-ink);
+  }
+
+  .chip {
+    display: inline-block;
+    width: 100%;
+    padding: 0.2rem 0;
+    border: 1px solid currentColor;
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .chip--scale {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+
+  .chip--cut {
+    color: var(--magenta-ink);
+  }
+
+  .chip--hold {
+    color: var(--faint);
+  }
+
+  .row--cut td:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: var(--magenta-ink);
+    transform-origin: left;
+    opacity: 0.55;
+  }
+
+  .row--cut td:not(:last-child) {
+    color: var(--faint);
+  }
+
+  .row--cut td.margin {
+    color: var(--magenta-ink);
+  }
+
+  .ledger__foot {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem;
+    border-top: 1px solid var(--ink);
+    background: var(--paper-2);
+  }
+
+  .ledger__foot > div {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .ledger__label {
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .ledger__note {
+    font-size: 0.68rem;
+    color: var(--faint);
+  }
+
+  .ledger__total {
+    font-size: clamp(1.9rem, 3.2vw, 2.6rem);
+    color: var(--magenta);
+  }
+
+  .ledger__total small {
+    font-size: 0.4em;
+    letter-spacing: 0;
+    color: var(--muted);
+  }
+
+  @media (max-width: 40rem) {
+    .col-revenue,
+    .sku,
+    th:first-child,
+    th:nth-child(4) {
+      display: none;
+    }
+
+    th:nth-child(2) {
+      width: 40%;
+    }
+
+    td,
+    th {
+      padding-inline: 0.6rem;
+    }
+
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ledger--animate .row {
+      animation: row-in 0.6s var(--ease) both;
+      animation-delay: calc(0.35s + var(--i) * 0.09s);
+    }
+
+    .ledger--animate .chip {
+      animation: chip-in 0.45s var(--ease) both;
+      animation-delay: calc(1.4s + var(--i) * 0.12s);
+    }
+
+    .ledger--animate .row--cut td:not(:last-child)::after {
+      animation: strike 0.5s var(--ease) both;
+      animation-delay: calc(1.6s + var(--i) * 0.12s);
+    }
+
+    .ledger--animate .ledger__total {
+      animation: chip-in 0.7s var(--ease) both;
+      animation-delay: 2.7s;
+    }
+  }
+
+  @keyframes row-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+
+  @keyframes chip-in {
+    from {
+      opacity: 0;
+      transform: scale(0.85);
+    }
+  }
+
+  @keyframes strike {
+    from {
+      transform: scaleX(0);
+    }
+  }
+
+  @keyframes pulse {
+    70% {
+      box-shadow: 0 0 0 8px rgb(255 27 191 / 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgb(255 27 191 / 0);
+    }
+  }
+</style>

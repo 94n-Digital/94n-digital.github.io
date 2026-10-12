@@ -1,0 +1,318 @@
+---
+import { compareFees, plans } from '../lib/pricing';
+
+interface Props {
+  initialSpend?: number;
+}
+
+const { initialSpend = 35_000 } = Astro.props;
+const rates = [0.1, 0.15, 0.2] as const;
+const initialRate = 0.15;
+const minSpend = 5_000;
+const maxSpend = plans[plans.length - 1]!.spendCap;
+const maxFee = maxSpend * rates[rates.length - 1]!;
+const initial = compareFees({ monthlySpend: initialSpend, percentageRate: initialRate })!;
+const gbp = (n: number) => `£${Math.round(n).toLocaleString('en-GB')}`;
+---
+
+<fee-calculator class="calc" data-max-fee={maxFee}>
+  <div class="calc__controls">
+    <label class="calc__label" for="spend">Your monthly ad spend</label>
+    <output class="figure calc__spend" for="spend" data-out="spend">{gbp(initialSpend)}</output>
+    <input
+      id="spend"
+      type="range"
+      min={minSpend}
+      max={maxSpend}
+      step="500"
+      value={initialSpend}
+      style={`--progress:${((initialSpend - minSpend) / (maxSpend - minSpend)) * 100}%`}
+      aria-describedby="calc-summary"
+    />
+    <div class="calc__scale mono" aria-hidden="true">
+      <span>{gbp(minSpend)}</span><span>{gbp(maxSpend)}</span>
+    </div>
+
+    <fieldset class="calc__rates">
+      <legend class="calc__label">Typical percentage-of-spend agency</legend>
+      {
+        rates.map((rate) => (
+          <label>
+            <input type="radio" name="rate" value={rate} checked={rate === initialRate} />
+            <span>{rate * 100}%</span>
+          </label>
+        ))
+      }
+    </fieldset>
+  </div>
+
+  <div class="calc__result" aria-live="polite" id="calc-summary">
+    <div class="calc__row">
+      <div class="calc__row-head">
+        <span>Percentage agency</span>
+        <span class="mono" data-out="percentage">{gbp(initial.percentageFee)}</span>
+      </div>
+      <div class="calc__track"><span class="calc__fill calc__fill--them" data-bar="percentage" style={`--w:${(initial.percentageFee / maxFee) * 100}%`}></span></div>
+    </div>
+
+    <div class="calc__row">
+      <div class="calc__row-head">
+        <span>94n <strong data-out="plan">{initial.plan.name}</strong>, flat</span>
+        <span class="mono" data-out="flat">{gbp(initial.flatFee)}</span>
+      </div>
+      <div class="calc__track"><span class="calc__fill calc__fill--us" data-bar="flat" style={`--w:${(initial.flatFee / maxFee) * 100}%`}></span></div>
+    </div>
+
+    <div class="calc__saving">
+      <span class="calc__label">You keep each month</span>
+      <span class="figure calc__saving-figure" data-out="saving">{gbp(initial.saving)}</span>
+      <span class="calc__share">
+        Our fee is <strong class="mono" data-out="share">{(initial.flatFeeShareOfSpend * 100).toFixed(1)}%</strong> of your spend, and the share falls as you grow.
+      </span>
+    </div>
+  </div>
+</fee-calculator>
+
+<script>
+  import { compareFees } from '../lib/pricing';
+
+  const gbp = (n: number) => `£${Math.round(n).toLocaleString('en-GB')}`;
+
+  class FeeCalculator extends HTMLElement {
+    connectedCallback() {
+      const spend = this.querySelector<HTMLInputElement>('input[type=range]');
+      if (!spend) return;
+      const maxFee = Number(this.dataset.maxFee);
+      const out = (key: string) => this.querySelector<HTMLElement>(`[data-out="${key}"]`);
+      const bar = (key: string) => this.querySelector<HTMLElement>(`[data-bar="${key}"]`);
+
+      const render = () => {
+        const rate = Number(this.querySelector<HTMLInputElement>('input[name=rate]:checked')?.value ?? 0.15);
+        const monthlySpend = Number(spend.value);
+        const result = compareFees({ monthlySpend, percentageRate: rate });
+        if (!result) return;
+
+        spend.style.setProperty('--progress', `${((monthlySpend - Number(spend.min)) / (Number(spend.max) - Number(spend.min))) * 100}%`);
+        out('spend')!.textContent = gbp(monthlySpend);
+        out('percentage')!.textContent = gbp(result.percentageFee);
+        out('flat')!.textContent = gbp(result.flatFee);
+        out('plan')!.textContent = result.plan.name;
+        out('saving')!.textContent = gbp(result.saving);
+        out('share')!.textContent = `${(result.flatFeeShareOfSpend * 100).toFixed(1)}%`;
+        bar('percentage')!.style.setProperty('--w', `${(result.percentageFee / maxFee) * 100}%`);
+        bar('flat')!.style.setProperty('--w', `${(result.flatFee / maxFee) * 100}%`);
+      };
+
+      this.addEventListener('input', render);
+      render();
+    }
+  }
+
+  customElements.define('fee-calculator', FeeCalculator);
+</script>
+
+<style>
+  .calc {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  .calc__controls,
+  .calc__result {
+    display: grid;
+    align-content: start;
+    gap: 1rem;
+    padding: clamp(1.5rem, 3.5vw, 2.75rem);
+  }
+
+  .calc__result {
+    border-left: 1px solid var(--ink);
+    background: var(--paper-2);
+    gap: 1.5rem;
+  }
+
+  .calc__label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .calc__spend {
+    font-size: clamp(2.6rem, 5vw, 4rem);
+  }
+
+  input[type='range'] {
+    --progress: 46%;
+    width: 100%;
+    height: 2rem;
+    margin: 0;
+    background: transparent;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  input[type='range']::-webkit-slider-runnable-track {
+    height: 3px;
+    background: linear-gradient(90deg, var(--ink) var(--progress), var(--line-strong) var(--progress));
+  }
+
+  input[type='range']::-moz-range-track {
+    height: 3px;
+    background: var(--line-strong);
+  }
+
+  input[type='range']::-moz-range-progress {
+    height: 3px;
+    background: var(--ink);
+  }
+
+  input[type='range']::-webkit-slider-thumb {
+    appearance: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-top: -0.67rem;
+    background: var(--magenta);
+    border: 3px solid var(--ink);
+    border-radius: 0;
+    transition: transform 0.2s var(--ease);
+  }
+
+  input[type='range']::-moz-range-thumb {
+    width: 1.1rem;
+    height: 1.1rem;
+    background: var(--magenta);
+    border: 3px solid var(--ink);
+    border-radius: 0;
+  }
+
+  input[type='range']:active::-webkit-slider-thumb {
+    transform: scale(1.15);
+  }
+
+  .calc__scale {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--faint);
+    margin-top: -0.5rem;
+  }
+
+  .calc__rates {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .calc__rates legend {
+    margin-bottom: 0.75rem;
+    padding: 0;
+  }
+
+  .calc__rates label {
+    position: relative;
+  }
+
+  .calc__rates input {
+    position: absolute;
+    opacity: 0;
+  }
+
+  .calc__rates span {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--line-strong);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s var(--ease);
+  }
+
+  .calc__rates input:checked + span {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+
+  .calc__rates input:focus-visible + span {
+    outline: 2px solid var(--magenta-ink);
+    outline-offset: 2px;
+  }
+
+  .calc__row {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .calc__row-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.95rem;
+  }
+
+  .calc__row-head .mono {
+    font-weight: 600;
+  }
+
+  .calc__track {
+    height: 0.9rem;
+    background: var(--paper);
+    border: 1px solid var(--line);
+  }
+
+  .calc__fill {
+    --w: 50%;
+    display: block;
+    height: 100%;
+    width: var(--w);
+    transition: width 0.45s var(--ease);
+  }
+
+  .calc__fill--them {
+    background: repeating-linear-gradient(135deg, #b9b9b4 0 4px, #d9d9d4 4px 8px);
+  }
+
+  .calc__fill--us {
+    background: var(--ink);
+  }
+
+  .calc__saving {
+    display: grid;
+    gap: 0.4rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .calc__saving-figure {
+    font-size: clamp(2.8rem, 6vw, 4.75rem);
+    color: var(--magenta);
+  }
+
+  .calc__share {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .calc__share strong {
+    color: var(--ink);
+  }
+
+  @media (max-width: 52rem) {
+    .calc {
+      grid-template-columns: 1fr;
+    }
+
+    .calc__result {
+      border-left: 0;
+      border-top: 1px solid var(--ink);
+    }
+  }
+</style>

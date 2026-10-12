@@ -1,0 +1,57 @@
+---
+import { Image } from 'astro:assets';
+import ukSearch from '../assets/legacy/awards/94n-uk-search-awards-2025.png';
+import globalSearch from '../assets/legacy/awards/94n-global-search-awards-2025.png';
+import gdea from '../assets/legacy/awards/94n-Digital-GDEA25_Winner_Colour.webp';
+import europeanPaidMedia from '../assets/legacy/awards/94n-european-paid-media-2025.png';
+import netty from '../assets/legacy/awards/94n-netty-awards-2025-01.png';
+import clutch1000 from '../assets/legacy/awards/94n-clutch-1000-2025.png';
+
+const awards = [
+  { src: ukSearch, alt: 'UK Search Awards 2025 winner' },
+  { src: globalSearch, alt: 'Global Search Awards 2025 winner' },
+  { src: gdea, alt: 'Global Digital Excellence Awards 2025 winner' },
+  { src: europeanPaidMedia, alt: 'European Paid Media Awards 2025 finalist' },
+  { src: netty, alt: 'The Netty Awards 2025 winner' },
+  { src: clutch1000, alt: 'Clutch 1000, 2025' },
+];
+---
+
+<ul class="awards">
+  {
+    awards.map((award) => (
+      <li>
+        <Image src={award.src} alt={award.alt} height={64} densities={[1, 2]} />
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .awards {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.75rem 2.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  img {
+    height: clamp(2.6rem, 4vw, 3.5rem);
+    width: auto;
+    filter: grayscale(1) contrast(1.1);
+    opacity: 0.7;
+    mix-blend-mode: multiply;
+    transition:
+      filter 0.3s var(--ease),
+      opacity 0.3s var(--ease);
+  }
+
+  img:hover {
+    filter: none;
+    opacity: 1;
+  }
+</style>

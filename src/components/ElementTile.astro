@@ -1,0 +1,101 @@
+---
+interface Props {
+  number: string;
+  symbol: string;
+  name: string;
+  value?: string;
+  tone?: 'light' | 'dark' | 'accent';
+  size?: 'm' | 'l';
+  class?: string;
+}
+
+const { number, symbol, name, value, tone = 'light', size = 'm', class: className } = Astro.props;
+---
+
+<div class:list={['tile', `tile--${tone}`, `tile--${size}`, className]}>
+  <div class="tile__top">
+    <span class="tile__number">{number}</span>
+    {value && <span class="tile__value">{value}</span>}
+  </div>
+  <span class="tile__symbol" aria-hidden="true">{symbol}</span>
+  <span class="tile__name">{name}</span>
+  <slot />
+</div>
+
+<style>
+  .tile {
+    --tile-border: var(--ink);
+    --tile-bg: var(--paper);
+    --tile-fg: var(--ink);
+    --tile-sub: var(--muted);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    aspect-ratio: 1;
+    padding: clamp(0.9rem, 1.6vw, 1.25rem);
+    border: 1.5px solid var(--tile-border);
+    background: var(--tile-bg);
+    color: var(--tile-fg);
+    transition:
+      transform 0.35s var(--ease),
+      border-color 0.35s var(--ease),
+      box-shadow 0.35s var(--ease);
+  }
+
+  .tile:hover {
+    transform: translateY(-4px);
+    border-color: var(--magenta);
+    box-shadow: 0 18px 40px -24px rgb(255 27 191 / 0.45);
+  }
+
+  .tile--dark {
+    --tile-border: #2a2a2a;
+    --tile-bg: #111;
+    --tile-fg: var(--paper);
+    --tile-sub: #a3a3a3;
+  }
+
+  .tile--accent {
+    --tile-border: var(--magenta);
+    border-width: 5px;
+  }
+
+  .tile__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--tile-sub);
+  }
+
+  .tile__value {
+    font-weight: 600;
+    color: var(--tile-fg);
+  }
+
+  .tile__symbol {
+    margin-top: auto;
+    font-size: clamp(2.4rem, 4.2vw, 3.6rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+
+  .tile--accent .tile__symbol {
+    color: var(--magenta);
+  }
+
+  .tile--l .tile__symbol {
+    font-size: clamp(3rem, 6vw, 5.25rem);
+  }
+
+  .tile__name {
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+</style>

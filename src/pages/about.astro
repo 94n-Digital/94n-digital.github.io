@@ -1,0 +1,302 @@
+---
+import { Image } from 'astro:assets';
+import teamPhoto from '../assets/legacy/team/hero-team-01.webp';
+import AuditCta from '../components/AuditCta.astro';
+import ElementTile from '../components/ElementTile.astro';
+import PageIntro from '../components/PageIntro.astro';
+import PeriodicTable from '../components/PeriodicTable.astro';
+import { claims, countries, leadership } from '../data/site';
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="About"
+  description="94n is a profit-led paid media agency for ecommerce. Senior specialists in nine countries, one accountable team, built on AdPeak, the SKU-level ad platform we co-own."
+>
+  <PageIntro eyebrow="About 94n" title="Specialists in nine countries. One accountable team.">
+    <p>
+      94n started in 2022 with a simple idea: the best paid-media specialists don’t all live in
+      one city. Founded in Riga, we now have around 30 people across the UK, Latvia, Spain, Portugal,
+      India and beyond, each with seven or more years’ experience and hired for one job.
+    </p>
+    <p>
+      Every account has an exec sponsor and a lead who works your hours. That’s how a mid-market
+      fee buys a senior team.
+    </p>
+  </PageIntro>
+
+  <section class="photo">
+    <div class="wrap">
+      <figure class="reveal">
+        <Image
+          src={teamPhoto}
+          alt="Eight members of the 94n team, dressed in white, against a white studio wall"
+          widths={[720, 1440, 2160]}
+          sizes="(max-width: 78rem) 100vw, 78rem"
+        />
+        <figcaption class="illustrative">Part of the 94n team.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap promises">
+      <div class="section-head reveal">
+        <span class="eyebrow">What we promise</span>
+        <h2 class="heading-l">Four things you can hold us to.</h2>
+      </div>
+      <ol class="promises__list">
+        {
+          claims.map((claim, i) => (
+            <li class="reveal">
+              <span class="figure promises__n">0{i + 1}</span>
+              <div>
+                <h3>{claim.title}</h3>
+                <p>{claim.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="wrap name">
+      <div class="name__copy reveal">
+        <span class="eyebrow">Why 94n</span>
+        <h2 class="heading-l">Everything is made of 94 elements.</h2>
+        <p class="lede">
+          There are 94 naturally occurring elements, and everything is made from them. We treat ad
+          accounts the same way: break them into their parts, test each one, keep what works.
+        </p>
+        <p class="lede">
+          It’s why our logo is an element tile, and why we look at your account one product at a
+          time.
+        </p>
+      </div>
+      <div class="reveal"><PeriodicTable /></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Where we are</span>
+        <h2 class="heading-l">Hired for one job each, wherever the best people are.</h2>
+        <p class="lede">
+          Led from the UK, with specialist teams for Google, Meta, Amazon, SEO, tracking, web and
+          creative spread across nine countries.
+        </p>
+      </div>
+      <ul class="countries">
+        {
+          countries.map((country, i) => (
+            <li class="reveal">
+              <ElementTile
+                number={country.number}
+                symbol={country.symbol}
+                name={country.name}
+                tone={i === 0 ? 'accent' : 'light'}
+              >
+                {country.detail && <span class="countries__detail">{country.detail}</span>}
+              </ElementTile>
+            </li>
+          ))
+        }
+        <li class="reveal">
+          <ElementTile number="94" symbol="n" name="One team" tone="dark">
+            <span class="countries__detail countries__detail--dark">~30 people, one way of working</span>
+          </ElementTile>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section leaders-section">
+    <div class="wrap leaders">
+      <div class="section-head reveal">
+        <span class="eyebrow">Leadership</span>
+        <h2 class="heading-m">One of us is personally accountable for your results.</h2>
+        <p class="lede">
+          Every account has an exec sponsor from our leadership team. Not a name on a slide: someone
+          who answers for your numbers.
+        </p>
+      </div>
+      <ul class="leaders__list">
+        {
+          leadership.map((person) => (
+            <li class="reveal">
+              <ElementTile number={person.number} symbol={person.symbol} name={person.name} size="l">
+                <span class="leaders__role">{person.role}</span>
+              </ElementTile>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <AuditCta />
+</Base>
+
+<style>
+  .photo {
+    padding-top: clamp(3rem, 6vw, 5rem);
+  }
+
+  figure {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+  }
+
+  figure :global(img) {
+    width: 100%;
+    aspect-ratio: 2160 / 975;
+    object-fit: cover;
+    border: 1px solid var(--line);
+  }
+
+  .promises {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .promises__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--ink);
+  }
+
+  .promises__list li {
+    display: grid;
+    grid-template-columns: 5rem 1fr;
+    gap: 1.5rem;
+    padding-block: 1.75rem;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .promises__n {
+    font-size: 2.25rem;
+    color: var(--line-strong);
+    transition: color 0.3s var(--ease);
+  }
+
+  .promises__list li:hover .promises__n {
+    color: var(--magenta);
+  }
+
+  .promises__list h3 {
+    font-size: var(--step-2);
+    margin-bottom: 0.4rem;
+  }
+
+  .promises__list p {
+    color: var(--muted);
+  }
+
+  @media (max-width: 52rem) {
+    .promises {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .promises__list li {
+      grid-template-columns: 3.5rem 1fr;
+    }
+  }
+
+  .name {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(2.5rem, 6vw, 5rem);
+    align-items: center;
+  }
+
+  .name__copy {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 64rem) {
+    .name {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .countries {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.5vw, 1.25rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .countries__detail {
+    font-size: 0.8rem;
+    line-height: 1.35;
+    color: var(--muted);
+  }
+
+  .countries__detail--dark {
+    color: #a3a3a3;
+  }
+
+  @media (max-width: 64rem) {
+    .countries {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .countries {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .leaders-section {
+    border-top: 1px solid var(--line);
+  }
+
+  .leaders {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .leaders .section-head {
+    margin-bottom: 0;
+  }
+
+  .leaders__list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(0.75rem, 1.5vw, 1.25rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .leaders__role {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  @media (max-width: 64rem) {
+    .leaders {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .leaders__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

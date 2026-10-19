@@ -1,0 +1,199 @@
+---
+import Logo from '../assets/brand/logo.svg';
+import { nav } from '../data/site';
+import { url } from '../lib/url';
+
+const current = Astro.url.pathname.replace(import.meta.env.BASE_URL, '/').replace(/\/$/, '');
+---
+
+<header class="header">
+  <div class="wrap header__inner">
+    <a class="brand" href={url('/')} aria-label="94n Digital, home">
+      <Logo class="brand__logo" aria-hidden="true" />
+      <span class="brand__words">
+        <span class="brand__name">94n</span>
+        <span class="brand__descriptor">Profit-led paid media</span>
+      </span>
+    </a>
+
+    <nav class="nav" aria-label="Main">
+      <ul>
+        {
+          nav.map((item) => (
+            <li>
+              <a href={url(item.href)} aria-current={current === item.href ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a class="btn btn--primary header__cta" href={url('/audit')}>
+        Free SKU profit audit
+      </a>
+    </nav>
+
+    <details class="menu">
+      <summary aria-label="Menu"><span></span><span></span></summary>
+      <div class="menu__panel">
+        {nav.map((item) => <a href={url(item.href)}>{item.label}</a>)}
+        <a class="btn btn--primary" href={url('/audit')}>Free SKU profit audit</a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgb(255 255 255 / 0.82);
+    backdrop-filter: saturate(1.4) blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4.5rem;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    text-decoration: none;
+  }
+
+  .brand__logo {
+    width: 2.4rem;
+    height: 2.4rem;
+    color: var(--magenta);
+  }
+
+  .brand__words {
+    display: grid;
+    line-height: 1.1;
+  }
+
+  .brand__name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    letter-spacing: -0.03em;
+  }
+
+  .brand__descriptor {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 2.25rem;
+  }
+
+  .nav ul {
+    display: flex;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .nav ul a {
+    position: relative;
+    font-size: 0.95rem;
+    text-decoration: none;
+    color: var(--ink-2);
+  }
+
+  .nav ul a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.35rem;
+    height: 1.5px;
+    background: var(--magenta);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s var(--ease);
+  }
+
+  .nav ul a:hover::after,
+  .nav ul a[aria-current='page']::after {
+    transform: scaleX(1);
+  }
+
+  .header__cta {
+    padding: 0.7rem 1.1rem;
+    font-size: 0.92rem;
+  }
+
+  .menu {
+    display: none;
+  }
+
+  @media (max-width: 52rem) {
+    .nav {
+      display: none;
+    }
+
+    .menu {
+      display: block;
+      position: relative;
+    }
+
+    .menu summary {
+      display: grid;
+      gap: 6px;
+      padding: 0.75rem 0.5rem;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .menu summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .menu summary span {
+      display: block;
+      width: 1.5rem;
+      height: 1.5px;
+      background: var(--ink);
+      transition: transform 0.25s var(--ease);
+    }
+
+    .menu[open] summary span:first-child {
+      transform: translateY(3.75px) rotate(45deg);
+    }
+
+    .menu[open] summary span:last-child {
+      transform: translateY(-3.75px) rotate(-45deg);
+    }
+
+    .menu__panel {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 0.6rem);
+      display: grid;
+      gap: 1rem;
+      min-width: 15rem;
+      padding: 1.25rem;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: 0 20px 40px -20px rgb(0 0 0 / 0.25);
+    }
+
+    .menu__panel a:not(.btn) {
+      font-size: 1.1rem;
+      text-decoration: none;
+    }
+  }
+</style>

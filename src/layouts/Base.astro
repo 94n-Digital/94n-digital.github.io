@@ -1,6 +1,7 @@
 ---
-import '@fontsource-variable/outfit';
-import '../styles/tokens.css';
+import '../styles/global.css';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
 
 interface Props {
   title?: string;
@@ -8,10 +9,11 @@ interface Props {
 }
 
 const {
-  title = '94n Digital',
-  description = 'Boutique performance marketing for ecommerce brands.',
+  title,
+  description = 'Profit-led paid media for ecommerce brands. A senior specialist for every channel, profit tracked for every product, and a flat fee that never takes a cut of your spend.',
 } = Astro.props;
 
+const fullTitle = title ? `${title} · 94n Digital` : '94n Digital · Profit-led paid media for ecommerce';
 const base = import.meta.env.BASE_URL;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
@@ -23,19 +25,38 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
     <link rel="canonical" href={canonical} />
     <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
+    <meta name="theme-color" content="#0a0a0a" />
+    <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="94n Digital" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="en_GB" />
   </head>
   <body>
-    <slot />
+    <a class="skip" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
   </body>
 </html>
 
-<style is:global>
-  body {
-    margin: 0;
-    font-family: var(--font-sans);
-    color: var(--color-ink);
-    background: var(--color-white);
+<style>
+  .skip {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    z-index: 100;
+    padding: 0.6rem 1rem;
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .skip:focus {
+    top: 1rem;
   }
 </style>

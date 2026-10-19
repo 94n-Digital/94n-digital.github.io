@@ -1,0 +1,78 @@
+---
+import Logo from '../assets/brand/logo.svg';
+import { url } from '../lib/url';
+---
+
+<section class="cta section section--tint">
+  <div class="wrap cta__inner">
+    <div class="cta__copy reveal">
+      <span class="eyebrow">Free SKU profit audit</span>
+      <h2 class="heading-l">Send us your product feed.</h2>
+      <p class="lede">
+        We’ll show you which products are losing money, with pounds attached, free, within five
+        working days.
+      </p>
+      <div class="cta__actions">
+        <a class="btn btn--primary" href={url('/audit')}>Get your audit <span class="arrow">→</span></a>
+        <a class="btn btn--ghost" href={url('/pricing')}>See our pricing</a>
+      </div>
+    </div>
+    <Logo class="cta__mark" aria-hidden="true" />
+  </div>
+</section>
+
+<style>
+  .cta {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: radial-gradient(circle at 80% 50%, black, transparent 70%);
+  }
+
+  .cta__inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 3rem;
+  }
+
+  .cta__copy {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .cta__mark {
+    justify-self: end;
+    width: min(100%, 22rem);
+    color: var(--magenta);
+  }
+
+  @media (max-width: 52rem) {
+    .cta__inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .cta__mark {
+      justify-self: start;
+      width: 6rem;
+      order: -1;
+    }
+  }
+</style>

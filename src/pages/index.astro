@@ -1,10 +1,466 @@
 ---
+import AuditCta from '../components/AuditCta.astro';
+import AwardsRow from '../components/AwardsRow.astro';
+import CaseCard from '../components/CaseCard.astro';
+import ElementTile from '../components/ElementTile.astro';
+import FeeCalculator from '../components/FeeCalculator.astro';
+import PeriodicTable from '../components/PeriodicTable.astro';
+import ProfitCurve from '../components/ProfitCurve.astro';
+import SkuLedger from '../components/SkuLedger.astro';
+import { caseStudies, contact, method, proof, roles } from '../data/site';
 import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
 ---
 
 <Base>
-  <main>
-    <h1>94n Digital</h1>
-    <p>Boutique performance marketing for ecommerce.</p>
-  </main>
+  <section class="hero">
+    <div class="hero__paper graph-paper" aria-hidden="true"></div>
+    <div class="wrap hero__inner">
+      <div class="hero__copy">
+        <span class="eyebrow">Paid media for ecommerce brands</span>
+        <h1 class="heading-xl">Every product should earn its ad spend.</h1>
+        <p class="lede">
+          A dedicated senior specialist for every channel: Google, Meta, Amazon and creative. We run
+          your account product by product on AdPeak, cut what loses money and scale what makes it, for
+          one flat monthly fee that never takes a cut of your spend.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href={url('/audit')}>Get a SKU profit audit <span class="arrow">→</span></a>
+          <a class="btn btn--ghost" href={url('/pricing')}>See our pricing</a>
+        </div>
+      </div>
+      <div class="hero__ledger">
+        <SkuLedger />
+      </div>
+    </div>
+  </section>
+
+  <section class="proof" aria-label="Proof">
+    <div class="wrap">
+      <dl class="proof__stats">
+        <div>
+          <dt>{proof.award}</dt>
+          <dd>{proof.awardDetail}</dd>
+        </div>
+        <div>
+          <dt>{proof.clutchRating} on Clutch</dt>
+          <dd><a href={contact.clutch} rel="noopener">From {proof.clutchReviews} verified reviews</a></dd>
+        </div>
+        <div>
+          <dt>{proof.brands} ecommerce brands</dt>
+          <dd>Across the UK, Europe and the US</dd>
+        </div>
+      </dl>
+      <AwardsRow />
+    </div>
+  </section>
+
+  <section class="section" id="problem">
+    <div class="wrap problem">
+      <div class="section-head reveal">
+        <span class="eyebrow">01 · The problem</span>
+        <h2 class="heading-l">A healthy average can hide hundreds of losing products.</h2>
+        <p class="lede">
+          Most agencies report blended ROAS. A few products carry the account while the long tail
+          quietly loses money. You see a healthy average. Your margin sees the losers.
+        </p>
+      </div>
+      <div class="reveal">
+        <ProfitCurve />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint" id="method">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">02 · How we work</span>
+        <h2 class="heading-l">Break the account into its elements. Keep what works.</h2>
+      </div>
+      <ol class="method">
+        {
+          method.map((step) => (
+            <li class="method__step reveal">
+              <ElementTile number={step.number} symbol={step.symbol} name={step.name} value={step.when} size="l" />
+              <p>{step.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--dark" id="team">
+    <div class="wrap">
+      <div class="team-head">
+        <div class="section-head reveal">
+          <span class="eyebrow">03 · What your fee buys</span>
+          <h2 class="heading-l">Four senior people on every account. No juniors.</h2>
+          <p class="lede">
+            Most agencies at this price give you one account manager and a junior doing the work.
+            Every 94n account, from Starter up, gets four people with at least seven years’
+            experience each.
+          </p>
+        </div>
+        <p class="team-head__figure reveal">
+          <span class="figure accent">7+</span>
+          <span>years’ experience,<br />everyone on your account</span>
+        </p>
+      </div>
+
+      <ul class="roles">
+        {
+          roles.map((role) => (
+            <li class="reveal">
+              <ElementTile number={role.number} symbol={role.symbol} name={role.name} value="7+ yrs" tone="dark" />
+              <p>{role.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="adpeak reveal">
+        <div>
+          <span class="eyebrow">Built on AdPeak</span>
+          <p class="adpeak__text">
+            We hire for one job each, wherever the best people are, across nine countries. AdPeak, the
+            SKU-level ad platform we co-own, handles the bid and budget grind so they can spend their
+            time thinking.
+          </p>
+        </div>
+        <a class="btn btn--ghost" href={contact.adpeak} rel="noopener">Visit adpeak.ai <span class="arrow">↗</span></a>
+      </div>
+      <p class="team-note reveal">Senior people only. You’ll meet all four before you sign.</p>
+    </div>
+  </section>
+
+  <section class="section" id="results">
+    <div class="wrap">
+      <div class="results-head">
+        <div class="section-head reveal">
+          <span class="eyebrow">04 · Results</span>
+          <h2 class="heading-l">Before and after, in revenue and margin.</h2>
+        </div>
+        <a class="btn btn--ghost reveal" href={url('/results')}>All results <span class="arrow">→</span></a>
+      </div>
+      <div class="cases">
+        {caseStudies.slice(0, 3).map((study) => <div class="reveal"><CaseCard study={study} /></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint" id="fees">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">05 · The fee</span>
+        <h2 class="heading-l">One flat fee. Never a cut of your spend.</h2>
+        <p class="lede">
+          Percentage agencies earn more when you spend more. We don’t, so our advice stays honest and
+          our fee shrinks as a share of your budget as you grow.
+        </p>
+      </div>
+      <div class="reveal">
+        <FeeCalculator />
+      </div>
+      <p class="fees__more reveal">
+        <a class="link" href={url('/pricing')}>See all plans and what’s included</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--dark why" id="why-94n">
+    <div class="wrap why__inner">
+      <div class="why__copy reveal">
+        <span class="eyebrow">Why 94n</span>
+        <h2 class="heading-l">Everything is made of 94 elements.</h2>
+        <p class="lede">
+          There are 94 naturally occurring elements, and everything is made from them. We treat ad
+          accounts the same way: break them into their parts, test each one, keep what works.
+        </p>
+        <a class="link" href={url('/about')}>About 94n</a>
+      </div>
+      <div class="reveal">
+        <PeriodicTable />
+      </div>
+    </div>
+  </section>
+
+  <AuditCta />
 </Base>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(3.5rem, 8vw, 7rem) clamp(4rem, 8vw, 6.5rem);
+  }
+
+  .hero__paper {
+    position: absolute;
+    inset: 0;
+    mask-image: linear-gradient(115deg, transparent 35%, black 75%);
+    opacity: 0.85;
+  }
+
+  .hero__inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(2.5rem, 5vw, 5rem);
+  }
+
+  .hero__copy {
+    display: grid;
+    gap: 1.75rem;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 64rem) {
+    .hero__inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .hero__ledger {
+      margin-right: 12px;
+    }
+  }
+
+  .proof {
+    padding-block: 2.5rem 3.5rem;
+    border-block: 1px solid var(--line);
+  }
+
+  .proof__stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0 0 2.75rem;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 2rem;
+  }
+
+  .proof__stats > div {
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  .proof__stats > div + div {
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--line);
+  }
+
+  .proof__stats dt {
+    font-size: var(--step-1);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .proof__stats dd {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--muted);
+  }
+
+  .proof__stats a {
+    text-decoration-color: var(--line-strong);
+    text-underline-offset: 0.2em;
+  }
+
+  @media (max-width: 52rem) {
+    .proof__stats {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.25rem;
+    }
+
+    .proof__stats > div + div {
+      padding-left: 0;
+      border-left: 0;
+    }
+  }
+
+  .method {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+  }
+
+  .method__step {
+    display: grid;
+    gap: 1.25rem;
+    align-content: start;
+  }
+
+  .method__step :global(.tile) {
+    aspect-ratio: 4 / 3;
+  }
+
+  .method__step p {
+    color: var(--muted);
+    max-width: 22rem;
+  }
+
+  @media (max-width: 52rem) {
+    .method {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .method__step {
+      grid-template-columns: 9rem 1fr;
+      align-items: start;
+    }
+  }
+
+  .team-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 2rem;
+  }
+
+  .team-head__figure {
+    display: grid;
+    gap: 0.5rem;
+    margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
+    color: #a8a8a8;
+    font-size: 0.95rem;
+  }
+
+  .team-head__figure .figure {
+    font-size: clamp(5rem, 12vw, 10rem);
+  }
+
+  .roles {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.5rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .roles li {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+  }
+
+  .roles p {
+    color: #b0b0b0;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 64rem) {
+    .roles {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .team-head {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .team-head__figure {
+      display: none;
+    }
+  }
+
+  .adpeak {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-top: clamp(3rem, 6vw, 4.5rem);
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    border: 1px solid #2c2c2c;
+    background: linear-gradient(120deg, #141414, #0a0a0a);
+  }
+
+  .adpeak > div {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .adpeak__text {
+    max-width: 44rem;
+    font-size: var(--step-1);
+    line-height: 1.45;
+    color: #e6e6e6;
+  }
+
+  @media (max-width: 52rem) {
+    .adpeak {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  .team-note {
+    margin-top: 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: #8a8a8a;
+  }
+
+  .results-head {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .results-head .btn {
+    margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
+  }
+
+  .cases {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.5rem);
+  }
+
+  @media (max-width: 64rem) {
+    .cases {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .results-head {
+      flex-direction: column;
+      align-items: start;
+    }
+
+    .results-head .btn {
+      display: none;
+    }
+  }
+
+  .fees__more {
+    margin-top: 1.5rem;
+  }
+
+  .why__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    align-items: center;
+    gap: clamp(2.5rem, 6vw, 5rem);
+  }
+
+  .why__copy {
+    display: grid;
+    gap: 1.5rem;
+    justify-items: start;
+  }
+
+  @media (max-width: 64rem) {
+    .why__inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

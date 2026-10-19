@@ -1,0 +1,132 @@
+---
+const symbols = (
+  'H He Li Be B C N O F Ne Na Mg Al Si P S Cl Ar K Ca Sc Ti V Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr ' +
+  'Rb Sr Y Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I Xe Cs Ba La Ce Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb ' +
+  'Lu Hf Ta W Re Os Ir Pt Au Hg Tl Pb Bi Po At Rn Fr Ra Ac Th Pa U Np Pu'
+).split(' ');
+
+if (symbols.length !== 94) throw new Error(`Expected 94 elements, got ${symbols.length}`);
+
+const position = (n: number): { row: number; col: number } => {
+  if (n === 1) return { row: 1, col: 1 };
+  if (n === 2) return { row: 1, col: 18 };
+  if (n <= 4) return { row: 2, col: n - 2 };
+  if (n <= 10) return { row: 2, col: n + 8 };
+  if (n <= 12) return { row: 3, col: n - 10 };
+  if (n <= 18) return { row: 3, col: n };
+  if (n <= 36) return { row: 4, col: n - 18 };
+  if (n <= 54) return { row: 5, col: n - 36 };
+  if (n <= 56) return { row: 6, col: n - 54 };
+  if (n <= 71) return { row: 9, col: n - 54 };
+  if (n <= 86) return { row: 6, col: n - 68 };
+  if (n <= 88) return { row: 7, col: n - 86 };
+  return { row: 10, col: n - 86 };
+};
+
+const elements = symbols.map((symbol, i) => ({ number: i + 1, symbol, ...position(i + 1) }));
+---
+
+<figure class="table" aria-label="The 94 naturally occurring elements, with element 94 shown as the 94n logo">
+  <div class="grid">
+    {
+      elements.map((el) => (
+        <div
+          class:list={['cell', { 'cell--brand': el.number === 94 }]}
+          style={`grid-row:${el.row};grid-column:${el.col}`}
+          aria-hidden="true"
+        >
+          <span class="cell__n">{el.number}</span>
+          <span class="cell__s">{el.number === 94 ? 'n' : el.symbol}</span>
+        </div>
+      ))
+    }
+  </div>
+  <figcaption class="illustrative">The 94 naturally occurring elements. Number 94 is ours.</figcaption>
+</figure>
+
+<style>
+  .table {
+    margin: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(18, minmax(0, 1fr));
+    grid-template-rows: repeat(7, auto) 0.6rem repeat(2, auto);
+    gap: 3px;
+  }
+
+  .cell {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    border: 1px solid #3a3a3a;
+    color: #b5b5b5;
+    transition:
+      background-color 0.25s var(--ease),
+      color 0.25s var(--ease),
+      border-color 0.25s var(--ease);
+  }
+
+  .cell:hover {
+    border-color: var(--paper);
+    color: var(--paper);
+  }
+
+  .cell__n {
+    position: absolute;
+    top: 6%;
+    left: 8%;
+    font-family: var(--font-mono);
+    font-size: clamp(0.3rem, 0.55vw, 0.55rem);
+    opacity: 0.7;
+  }
+
+  .cell__s {
+    font-size: clamp(0.45rem, 1.15vw, 1rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+  }
+
+  .cell--brand {
+    border: 3px solid var(--magenta);
+    color: var(--magenta);
+    background: rgb(255 27 191 / 0.12);
+    box-shadow: 0 0 24px rgb(255 27 191 / 0.35);
+  }
+
+  .cell--brand .cell__s {
+    font-size: clamp(0.6rem, 1.6vw, 1.4rem);
+    font-weight: 600;
+  }
+
+  @media (max-width: 40rem) {
+    .cell__n {
+      display: none;
+    }
+
+    .grid {
+      gap: 2px;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .cell {
+        animation: cell-in linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 35%;
+      }
+    }
+  }
+
+  @keyframes cell-in {
+    from {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+  }
+</style>

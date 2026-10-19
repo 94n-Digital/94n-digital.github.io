@@ -1,0 +1,107 @@
+---
+import { Image } from 'astro:assets';
+import hiatt from '../assets/legacy/clients/hiatt-logo-01.jpg';
+import vertella from '../assets/legacy/clients/vertella-logo.jpg';
+import volcora from '../assets/legacy/clients/Volcora.png';
+import natran from '../assets/legacy/clients/Natran-logo-01.jpg';
+import patchi from '../assets/legacy/clients/patchi-logo.jpg';
+import stenders from '../assets/legacy/clients/STENDERS_LOGO_Black-01.png';
+import fissman from '../assets/legacy/clients/FISSMAN_LOGO.jpg';
+import balfour from '../assets/legacy/clients/balfourco_new_logo.png';
+import advantage from '../assets/legacy/clients/advantage.png';
+import swynford from '../assets/legacy/clients/Swynford.jpeg';
+import envisage from '../assets/legacy/clients/enviage.png';
+import cartmel from '../assets/legacy/clients/Cartmel-racecourse.png';
+
+const clients = [
+  { src: hiatt, name: 'Hiatt Hardware' },
+  { src: vertella, name: 'Vertella' },
+  { src: volcora, name: 'Volcora' },
+  { src: stenders, name: 'Stenders' },
+  { src: patchi, name: 'Patchi' },
+  { src: fissman, name: 'Fissman' },
+  { src: balfour, name: 'Balfour' },
+  { src: natran, name: 'Natran' },
+  { src: advantage, name: 'Advantage Pro Services' },
+  { src: swynford, name: 'Swynford Manor' },
+  { src: envisage, name: 'Envisage Dental' },
+  { src: cartmel, name: 'Cartmel Racecourse' },
+];
+---
+
+<ul class="clients">
+  {
+    clients.map((client) => (
+      <li>
+        <div class="clients__logo">
+          <Image src={client.src} alt={`${client.name} logo`} width={240} densities={[1, 2]} />
+        </div>
+        <span>{client.name}</span>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .clients {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--line-strong);
+    border-left: 1px solid var(--line-strong);
+  }
+
+  li {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    border-right: 1px solid var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
+    background: var(--paper);
+  }
+
+  .clients__logo {
+    display: grid;
+    place-items: center;
+    height: 5rem;
+  }
+
+  img {
+    max-height: 4.5rem;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    filter: grayscale(1);
+    mix-blend-mode: multiply;
+    opacity: 0.8;
+    transition:
+      filter 0.3s var(--ease),
+      opacity 0.3s var(--ease);
+  }
+
+  li:hover img {
+    filter: none;
+    opacity: 1;
+  }
+
+  span {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
+  @media (max-width: 64rem) {
+    .clients {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .clients {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

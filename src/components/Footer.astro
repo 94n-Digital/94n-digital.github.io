@@ -1,0 +1,128 @@
+---
+import Logo from '../assets/brand/logo.svg';
+import { contact, nav } from '../data/site';
+import { url } from '../lib/url';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <Logo class="footer__logo" aria-hidden="true" />
+        <p class="footer__tagline">
+          A specialist for every channel, profit tracked for every product, and a flat fee that
+          never takes a cut of your spend.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="footer__label">Site</h2>
+        <ul>
+          <li><a href={url('/')}>Home</a></li>
+          {nav.map((item) => <li><a href={url(item.href)}>{item.label}</a></li>)}
+          <li><a href={url('/audit')}>SKU profit audit</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="footer__label">Talk to us</h2>
+        <ul>
+          <li><a href={`mailto:${contact.email}`}>{contact.email}</a></li>
+          <li><a href={contact.phoneHref}>{contact.phone}</a></li>
+          <li>London · Riga</li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="footer__label">Elsewhere</h2>
+        <ul>
+          <li><a href={contact.linkedin} rel="noopener">LinkedIn</a></li>
+          <li><a href={contact.clutch} rel="noopener">Clutch reviews</a></li>
+          <li><a href={contact.adpeak} rel="noopener">AdPeak</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__base">
+      <span>© {year} 94n Digital</span>
+      <span class="mono">94 elements. Every account breaks down the same way.</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding-block: 4.5rem 2rem;
+    background: var(--ink);
+    color: #cfcfcf;
+    font-size: 0.95rem;
+  }
+
+  .footer__grid {
+    display: grid;
+    grid-template-columns: 2fr repeat(3, 1fr);
+    gap: 3rem;
+  }
+
+  .footer__logo {
+    width: 3.5rem;
+    color: var(--magenta);
+    margin-bottom: 1.5rem;
+  }
+
+  .footer__tagline {
+    max-width: 24rem;
+    color: #a8a8a8;
+  }
+
+  .footer__label {
+    margin-bottom: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #8a8a8a;
+  }
+
+  ul {
+    display: grid;
+    gap: 0.55rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    text-decoration: none;
+    transition: color 0.2s var(--ease);
+  }
+
+  a:hover {
+    color: var(--magenta);
+  }
+
+  .footer__base {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 4rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #262626;
+    font-size: 0.8rem;
+    color: #8a8a8a;
+  }
+
+  @media (max-width: 52rem) {
+    .footer__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .footer__brand {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

@@ -6,7 +6,7 @@ Notes from reviewing the WordPress site at https://94n.digital (October 2026). T
 
 **Logo.** A periodic-table "element" tile: "94" over a lowercase "n" inside a square frame. It is single-colour, saved as `src/assets/brand/logo.svg` with `fill="currentColor"`. `public/favicon.svg` is the same logo in brand pink.
 
-**Palette.** Taken from the Automatic.css tokens. The live tokens are in `src/styles/tokens.css`.
+**Palette.** Taken from the Automatic.css tokens. The live tokens are in `src/styles/global.css`.
 
 | Role             | Hex       | Notes                                       |
 | :--------------- | :-------- | :------------------------------------------ |
